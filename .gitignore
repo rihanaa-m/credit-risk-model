@@ -9,10 +9,12 @@ __pycache__/
 data/raw/*.csv
 data/raw/*.zip
 data/processed/*
+!data/processed/.gitkeep
 
 # Notebooks
 .ipynb_checkpoints/
 
 # Reports (submit separately; keep out of GitHub)
 reports/
+scripts/export_report_pdf.py
 
