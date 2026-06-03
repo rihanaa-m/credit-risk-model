@@ -22,8 +22,14 @@ python -m venv .venv
 pip install -r requirements.txt
 python scripts/run_task2_eda.py
 python scripts/build_eda_notebook.py
+python scripts/generate_interim_report_pdf.py
 jupyter notebook notebooks/eda.ipynb
 ```
+
+> Generated artifacts:
+> - `analysis_outputs/task2/` — EDA figures
+> - `notebooks/eda.ipynb` — regenerated Task 2 notebook
+> - `reports/interim_report_revised.pdf` — final interim report PDF
 
 ---
 
