@@ -5,4 +5,15 @@ seaborn
 jupyter
 nbformat
 reportlab
+scikit-learn
+xgboost
+mlflow
+fastapi
+uvicorn
+pydantic
+pytest
+pytest-cov
+flake8
+black
+isort
 

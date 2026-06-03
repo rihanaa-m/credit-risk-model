@@ -203,11 +203,13 @@ def main() -> None:
             story.append(Paragraph(content, h3_style))
         
         elif block_type == "paragraph":
-            # Replace markdown bold/italic
-            content = content.replace("**", "<b>")
-            content = content.replace("**", "</b>")
-            content = content.replace("*", "<i>")
-            content = content.replace("*", "</i>")
+            # Replace markdown bold/italic more carefully
+            # Replace **text** with <b>text</b>
+            content = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', content)
+            # Escape remaining special chars
+            content = content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            # Restore bold tags
+            content = content.replace("&lt;b&gt;", "<b>").replace("&lt;/b&gt;", "</b>")
             story.append(Paragraph(content, body_style))
             story.append(Spacer(1, 0.1 * cm))
         
