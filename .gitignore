@@ -17,4 +17,5 @@ data/processed/*
 # Reports (submit separately; keep out of GitHub)
 reports/
 scripts/export_report_pdf.py
+scripts/generate_interim_report_pdf.py
 
