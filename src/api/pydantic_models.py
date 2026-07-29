@@ -1,12 +1,15 @@
-"""Pydantic models for FastAPI request/response validation."""
+"""Pydantic models for FastAPI request/response validation.
 
-from typing import Dict, List, Optional
+Enhanced for Week 12 with support for WoE-transformed features and
+backward compatibility with original feature set.
+"""
 
+from typing import Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 
 
 class FeatureInput(BaseModel):
-    """Input features for risk prediction."""
+    """Input features for risk prediction (original feature set)."""
 
     agg_amount_sum: float = Field(..., description="Sum of transaction amounts")
     agg_amount_mean: float = Field(..., description="Mean transaction amount")
@@ -34,6 +37,61 @@ class FeatureInput(BaseModel):
                 "txn_month": 6,
                 "product_category": "airtime",
                 "channel_id": "web",
+            }
+        }
+
+
+class EnhancedFeatureInput(BaseModel):
+    """Enhanced input features for risk prediction with WoE-transformed features.
+
+    This model supports the Week 12 enhanced feature set with WoE/IV transformations.
+    It's designed to handle both numerical and WoE-transformed features.
+    """
+
+    # Original features (for backward compatibility)
+    agg_amount_sum: float = Field(..., description="Sum of transaction amounts")
+    agg_amount_mean: float = Field(..., description="Mean transaction amount")
+    agg_amount_count: float = Field(..., description="Number of transactions")
+    agg_value_sum: float = Field(..., description="Sum of transaction values")
+    agg_value_mean: float = Field(..., description="Mean transaction value")
+    agg_value_std: float = Field(..., description="Std dev of transaction values")
+    fraud_rate: float = Field(..., description="Historical fraud rate")
+    txn_hour: int = Field(..., description="Hour of transaction")
+    txn_month: int = Field(..., description="Month of transaction")
+
+    # WoE-transformed features (optional for enhanced models)
+    # These would be populated by the WoE transformation pipeline
+    agg_amount_sum_woe: Optional[float] = Field(None, description="WoE-transformed amount sum")
+    agg_amount_mean_woe: Optional[float] = Field(None, description="WoE-transformed amount mean")
+    fraud_rate_woe: Optional[float] = Field(None, description="WoE-transformed fraud rate")
+    txn_hour_woe: Optional[float] = Field(None, description="WoE-transformed transaction hour")
+
+    # Additional RFM-based features (from enhanced proxy target)
+    rfm_composite_score: Optional[float] = Field(None, description="RFM composite score (0-100)")
+    recency_days: Optional[int] = Field(None, description="Days since last transaction")
+    frequency: Optional[int] = Field(None, description="Transaction frequency count")
+    monetary_value: Optional[float] = Field(None, description="Total monetary value")
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "agg_amount_sum": 50000,
+                "agg_amount_mean": 5000,
+                "agg_amount_count": 10,
+                "agg_value_sum": 50000,
+                "agg_value_mean": 5000,
+                "agg_value_std": 2000,
+                "fraud_rate": 0.0,
+                "txn_hour": 14,
+                "txn_month": 6,
+                # Enhanced features
+                "agg_amount_sum_woe": 0.5,
+                "agg_amount_mean_woe": 0.3,
+                "fraud_rate_woe": -0.2,
+                "rfm_composite_score": 75.0,
+                "recency_days": 15,
+                "frequency": 10,
+                "monetary_value": 50000,
             }
         }
 
